@@ -1,8 +1,7 @@
-const ContactList = ({ contacts }) => {
-  console.log(contacts);
+const ContactList = ({ contacts, deleteContact }) => {
   return contacts.length > 0 ? (
     contacts.map((contact) => (
-      <div>
+      <div key={contact.id}>
         <p>
           <span>نام: </span>
           <span>{contact.firstName}</span>
@@ -19,6 +18,7 @@ const ContactList = ({ contacts }) => {
           <span>کد ملی: </span>
           <span>{contact.nationalCode}</span>
         </p>
+        <button onClick={() => deleteContact(contact.id)}>حذف مخاطب</button>
       </div>
     ))
   ) : (

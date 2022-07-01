@@ -13,6 +13,10 @@ function App() {
   const addNewContactHandler = (data) => {
     setContacts([...contacts, data]);
   };
+  const deleteContactHandler = (id) => {
+    const updateContact = contacts.filter((contact) => contact.id != id);
+    setContacts(updateContact);
+  };
   return (
     <div className="App">
       <AuthProvider>
@@ -32,7 +36,10 @@ function App() {
             path="/"
             element={
               <RequireAuth>
-                <HomePage contacts={contacts} />
+                <HomePage
+                  contacts={contacts}
+                  deleteContact={deleteContactHandler}
+                />
               </RequireAuth>
             }
           />
