@@ -2,9 +2,13 @@ import { useFormik } from "formik";
 import Input from "../../common/Input";
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
-import { loginUser } from "../../services/loginServices";
-import { useAuth, useAuthActions } from "../../Providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuthActions } from "../../Providers/AuthProvider";
+
+const DUMMY_DATA = {
+  userName: "testNasiba",
+  password: "test123",
+};
 
 const initialValues = {
   username: "",
@@ -18,23 +22,18 @@ const validationSchema = Yup.object({
 
 const LoginForm = () => {
   const setAuth = useAuthActions();
-  const { stateAuth } = useAuth();
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  // useEffect(() => {
-  //   if (auth) navigate(state?.path || "/dashboard");
-  // }, [auth]);
-
   const onSubmit = async (values) => {
-    try {
-      const { data } = await loginUser(values);
-      //setError("");
-      setAuth(data.Value);
-      navigate(state?.path || "/dashboard/tourlist");
-    } catch (error) {
-      console.log(error);
+    if (
+      values.username === DUMMY_DATA.userName &&
+      values.password === DUMMY_DATA.password
+    ) {
+      setAuth(true);
+      navigate(state?.path || "/");
+    } else {
+      alert("نام کاربری یا رمز عبور اشتباه است.");
     }
   };
   const formik = useFormik({
@@ -46,10 +45,8 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="w-11/12 md:w-1/2 mx-auto shadow-md border border-stone-100 my-10 p-6 rounded-md bg-white">
-      <h3 className="inline-block border-b-2 border-orangeKite font-bold text-lg mb-5">
-        ورود
-      </h3>
+    <div className="">
+      <h3 className="">ورود</h3>
       <form onSubmit={formik.handleSubmit}>
         <Input formik={formik} name="username" label="نام کاربری" />
         <Input
@@ -61,15 +58,11 @@ const LoginForm = () => {
         <button
           type="submit"
           disabled={!formik.isValid}
-          className="bg-orangeKite disabled:bg-stone-400 py-2 rounded text-white"
+          className=""
           style={{ width: "100%" }}
         >
           ورود به کایت
         </button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {/* <Link to={`/signup?redirect=${redirect}`} className="calltoLogin">
-          <p>Not signup yet?</p>
-        </Link> */}
       </form>
     </div>
   );
